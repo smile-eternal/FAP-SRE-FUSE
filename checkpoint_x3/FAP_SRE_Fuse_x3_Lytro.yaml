@@ -1,0 +1,51 @@
+EXP_NAME: SRGAN_x2-SRGAN_ImageNet-Set5
+# random number seed
+SEED: 0
+# Super resolution magnification factor
+SCALE: 2
+# run device model
+DEVICE_ID: 0
+# Model weights path
+MODEL_WEIGHTS_PATH: "./results/SRGAN_x2-SRGAN_ImageNet.pth.tar"
+
+# Model define
+MODEL:
+  G:
+    Siamese_A: "Siamese_A_Net"
+    Siamese_B: "Siamese_B_Net"
+    Attention: "Generator"
+    Gather : "gather_module"
+    IN_CHANNELS: 32
+    OUT_CHANNELS: 32
+    RDB_NUMBERS : 10
+    LAYER_NUMBERS : 3
+    FIRST_CHANNEL: 3
+    KERNEL_SIZE : 3
+    NUM_WORKERS: 16
+    COMPILED: False
+    SCALE : 3
+    EPOCH : 1000
+    ATTENTION_WEIGHTS_PATH : './pre_train/mask.pkl'
+    TRAIN_PATH : "./data/data"
+    BATCH_SIZE : 8
+    SAVE_DIR : "./COMPLEMENT"
+
+TEST:
+  DATASET:
+    PAIRED_TEST_A_IMAGES_DIR: "./data/LytroDataset/lytro-A"
+    PAIRED_TEST_B_IMAGES_DIR: "./data/LytroDataset/lytro-B"
+
+
+  # Test hyperparameters
+  HYP:
+    IMGS_PER_BATCH: 1
+    SHUFFLE: False
+    NUM_WORKERS: 1
+    PIN_MEMORY: True
+    PERSISTENT_WORKERS: True
+  Weights:
+    path : "checkpoint_x3/net_parameters499"
+  # Only test Y channel
+  ONLY_TEST_Y_CHANNEL: True
+
+  SAVE_IMAGE_DIR: ""
